@@ -1,0 +1,37 @@
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this reusable workflow repo
+        uses: actions/checkout@v4
+        with:
+          repository: softeye/github-actions   
+          ref: main                                      
+          path: shared                                   
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create virtual environment
+        run: python -m venv venv
+
+      - name: Install requirements if present
+        run: |
+          source venv/bin/activate
+          if [ -f shared/requirements.txt ]; then
+            pip install -r shared/requirements.txt
+          fi
+
+      - name: Run notify_release.py
+        run: |
+          source venv/bin/activate
+          python shared/scripts/notify_release.py
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RELEASE_NAME: ${{ inputs.name }}
+          RELEASE_URL: ${{ inputs.url }}
+          RELEASE_TIME: ${{ inputs.timestamp }}
+          RELEASE_BODY: ${{ inputs.body }}
+          REPO_NAME: ${{ github.repository }}
