@@ -48,7 +48,7 @@ jobs:
       - name: Run notify_release.py
         run: |
           source venv/bin/activate
-          python shared/scripts/notify_release.py
+          python shared/scripts/notify_discord_release.py
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           RELEASE_NAME: ${{ inputs.name }}
