@@ -1,3 +1,24 @@
+name: Notify Discord
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+      url:
+        required: true
+        type: string
+      timestamp:
+        required: true
+        type: string
+      body:
+        required: false
+        type: string
+    secrets:
+      DISCORD_WEBHOOK_URL:
+        required: true
+
 jobs:
   notify:
     runs-on: ubuntu-latest
@@ -5,9 +26,9 @@ jobs:
       - name: Checkout this reusable workflow repo
         uses: actions/checkout@v4
         with:
-          repository: softeye/github-actions   
-          ref: main                                      
-          path: shared                                   
+          repository: softeye/github-actions
+          ref: main
+          path: shared
 
       - name: Set up Python
         uses: actions/setup-python@v5
